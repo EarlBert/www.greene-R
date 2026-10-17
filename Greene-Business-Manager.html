@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Business Manager</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #e7efff;
+            background: #061735;
+            font-synthesis: none;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 75% 0%, rgba(20, 77, 153, .18), transparent 45%),
+                #061735;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        button,
+        a,
+        select {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .sidebar {
+            display: flex;
+            flex: 0 0 250px;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 0 14px 20px;
+            background: linear-gradient(180deg, #0a1b3a, #081832);
+            border-right: 1px solid #203c66;
+        }
+
+        .brand {
+            display: flex;
+            min-height: 66px;
+            align-items: center;
+            gap: 12px;
+            padding: 0 8px;
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(117, 155, 211, .12);
+        }
+
+        .brand-mark {
+            display: grid;
+            width: 40px;
+            height: 40px;
+            place-items: center;
+            border-radius: 12px;
+            background: #0b72ed;
+            color: white;
+            font-size: 24px;
+        }
+
+        .brand-copy {
+            display: grid;
+            gap: 4px;
+        }
+
+        .brand-copy strong {
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .brand-copy small {
+            color: #9db4d6;
+            font-size: 11px;
+            letter-spacing: .04em;
+        }
+
+        .main-nav {
+            display: grid;
+            gap: 5px;
+            padding: 14px 0 18px;
+        }
+
+        .nav-link {
+            display: flex;
+            min-height: 42px;
+            align-items: center;
+            gap: 13px;
+            padding: 0 12px;
+            border-radius: 9px;
+            color: #d1def2;
+            font-size: 13px;
+            text-decoration: none;
+            transition: background-color .15s ease, color .15s ease;
+        }
+
+        .nav-link>span {
+            display: inline-grid;
+            width: 18px;
+            place-items: center;
+            color: #a9c2e7;
+            font-size: 18px;
+        }
+
+        .nav-link:hover {
+            background: rgba(43, 87, 148, .38);
+            color: #fff;
+        }
+
+        .nav-link.active {
+            background: linear-gradient(100deg, #0879f9, #0759d5);
+            color: #fff;
+            font-weight: 700;
+            box-shadow: 0 5px 16px rgba(0, 91, 229, .2);
+        }
+
+        .nav-link.active>span {
+            color: #fff;
+        }
+
+        .business-type,
+        .quick-actions {
+            border-top: 1px solid rgba(117, 155, 211, .16);
+        }
+
+        .business-type {
+            display: grid;
+            gap: 10px;
+            padding: 19px 6px;
+        }
+
+        .business-type label,
+        .quick-actions h2 {
+            color: #9db4d6;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .business-type select {
+            width: 100%;
+            min-height: 42px;
+            padding: 0 12px;
+            border: 1px solid #274673;
+            border-radius: 9px;
+            background: #142c53;
+            color: #e7efff;
+        }
+
+        .quick-actions {
+            display: grid;
+            gap: 9px;
+            padding: 16px 6px 0;
+        }
+
+        .quick-actions h2 {
+            margin: 0 0 1px;
+            color: #dce8fa;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .action-button {
+            display: flex;
+            min-height: 41px;
+            align-items: center;
+            gap: 10px;
+            padding: 0 12px;
+            border: 0;
+            border-radius: 9px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: left;
+        }
+
+        .action-button span {
+            font-size: 18px;
+        }
+
+        .add-product {
+            background: linear-gradient(100deg, #08a989, #00a884);
+        }
+
+        .record-sale {
+            background: linear-gradient(100deg, #0879f9, #0759d5);
+        }
+
+        .add-expense {
+            background: linear-gradient(100deg, #7a48e8, #5e36cb);
+        }
+
+        .record-purchase {
+            background: linear-gradient(100deg, #1083e0, #0f83d1);
+        }
+
+        .view-reports {
+            background: linear-gradient(100deg, #e7eb06, #e0e413);
+        }
+
+        .action-button:hover {
+            filter: brightness(1.12);
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .topbar {
+            display: flex;
+            height: 66px;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 18px;
+            padding: 0 28px;
+            border-bottom: 1px solid rgba(117, 155, 211, .16);
+            background: rgba(7, 24, 51, .7);
+        }
+
+        .search-box {
+            display: flex;
+            width: min(440px, 55%);
+            height: 38px;
+            align-items: center;
+            gap: 10px;
+            padding: 0 12px;
+            border: 1px solid #29466f;
+            border-radius: 9px;
+            background: #10294d;
+            color: #a9c2e7;
+        }
+
+        .search-box>span {
+            font-size: 23px;
+            line-height: 1;
+        }
+
+        .search-box input {
+            width: 100%;
+            border: 0;
+            outline: 0;
+            background: transparent;
+            color: #e7efff;
+            font-size: 12px;
+        }
+
+        .search-box input::placeholder {
+            color: #a9bada;
+        }
+
+        .profile-button,
+        .mobile-menu {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            border: 0;
+            background: transparent;
+            color: #e7efff;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .avatar {
+            display: grid;
+            width: 30px;
+            height: 30px;
+            place-items: center;
+            border-radius: 50%;
+            background: #196add;
+            font-weight: 700;
+        }
+
+        .mobile-menu {
+            display: none;
+        }
+
+        .dashboard {
+            display: grid;
+            width: min(100%, 1440px);
+            gap: 14px;
+            margin: 0 auto;
+            padding: 18px 20px 28px;
+        }
+
+        .welcome-banner {
+            display: flex;
+            min-height: 90px;
+            align-items: center;
+            gap: 17px;
+            padding: 18px 22px;
+            border: 1px solid rgba(109, 161, 255, .23);
+            border-radius: 14px;
+            background: linear-gradient(105deg, #0875ef, #3145dc);
+            box-shadow: 0 10px 26px rgba(0, 80, 220, .14);
+        }
+
+        .welcome-icon {
+            display: grid;
+            width: 48px;
+            height: 48px;
+            place-items: center;
+            color: #fff;
+            font-size: 35px;
+        }
+
+        .welcome-banner h1 {
+            margin: 0 0 5px;
+            color: white;
+            font-size: 21px;
+        }
+
+        .welcome-banner p {
+            margin: 0;
+            color: #e2ebff;
+            font-size: 13px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .summary-card {
+            display: flex;
+            min-height: 112px;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            border: 1px solid rgba(117, 174, 226, .24);
+            border-radius: 13px;
+            background: #102c50;
+        }
+
+        .sales-card {
+            background: linear-gradient(110deg, #087b72, #07545f);
+        }
+
+        .expenses-card {
+            background: linear-gradient(110deg, #772d55, #522545);
+        }
+
+        .stock-card {
+            background: linear-gradient(110deg, #2b4789, #233b6d);
+        }
+
+        .summary-icon {
+            display: grid;
+            flex: 0 0 50px;
+            width: 50px;
+            height: 50px;
+            place-items: center;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .17);
+            font-size: 23px;
+        }
+
+        .summary-card p {
+            margin: 0 0 7px;
+            color: #e4edfb;
+            font-size: 13px;
+        }
+
+        .summary-card strong {
+            display: block;
+            margin-bottom: 7px;
+            color: #fff;
+            font-size: 19px;
+        }
+
+        .summary-card small {
+            color: #c4d4e9;
+            font-size: 11px;
+        }
+
+        .trend-up {
+            margin-right: 5px;
+            color: #35e0b1;
+            font-weight: 700;
+        }
+
+        .trend-down {
+            margin-right: 5px;
+            color: #48dec1;
+            font-weight: 700;
+        }
+
+        .panel {
+            min-width: 0;
+            padding: 16px;
+            border: 1px solid #29466f;
+            border-radius: 13px;
+            background: rgba(10, 31, 63, .78);
+        }
+
+        .panel-heading {
+            display: flex;
+            min-height: 30px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 13px;
+        }
+
+        .panel-heading h2 {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin: 0;
+            color: #eaf2ff;
+            font-size: 15px;
+        }
+
+        .panel-heading h2 span {
+            color: #c8dcf8;
+            font-size: 18px;
+        }
+
+        .panel-heading select {
+            min-height: 31px;
+            padding: 0 9px;
+            border: 1px solid #29466f;
+            border-radius: 7px;
+            background: #10294d;
+            color: #dce8fa;
+            font-size: 11px;
+        }
+
+        .chart {
+            position: relative;
+            display: grid;
+            height: 200px;
+            place-items: center;
+            padding: 16px;
+            background: repeating-linear-gradient(to bottom,
+                    transparent 0,
+                    transparent 37px,
+                    rgba(117, 155, 211, .12) 38px,
+                    transparent 39px);
+        }
+
+        .chart-empty {
+            margin: 0;
+            color: #b5c6df;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .inventory-panel {
+            padding-bottom: 7px;
+        }
+
+        .panel-heading>a {
+            color: #55a6ff;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .panel-heading>a:hover {
+            color: #a3d0ff;
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        th,
+        td {
+            padding: 11px 10px;
+            border-top: 1px solid rgba(117, 155, 211, .13);
+            font-size: 12px;
+        }
+
+        th {
+            color: #aebfda;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        td {
+            color: #e0eafa;
+        }
+
+        .empty-inventory {
+            white-space: normal;
+            color: #b5c6df;
+            text-align: center;
+        }
+
+        .empty-inventory span {
+            display: block;
+            margin-top: 5px;
+            color: #e0eafa;
+        }
+
+        .status-in-stock,
+        .status-low {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+        }
+
+        .status-in-stock {
+            background: rgba(24, 183, 137, .15);
+            color: #43ddb0;
+        }
+
+        .status-low {
+            background: rgba(244, 172, 66, .15);
+            color: #ffc66f;
+        }
+
+        @media (max-width: 850px) {
+            .sidebar {
+                flex-basis: 215px;
+                padding-right: 10px;
+                padding-left: 10px;
+            }
+
+            .dashboard {
+                padding-right: 14px;
+                padding-left: 14px;
+            }
+
+            .summary-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .sidebar {
+                flex-basis: 64px;
+                align-items: center;
+                padding-right: 7px;
+                padding-left: 7px;
+            }
+
+            .brand {
+                justify-content: center;
+                width: 100%;
+                padding: 0;
+            }
+
+            .brand-copy,
+            .nav-link:not(.active) {
+                display: none;
+            }
+
+            .main-nav {
+                width: 100%;
+            }
+
+            .nav-link {
+                justify-content: center;
+                padding: 0;
+                font-size: 0;
+            }
+
+            .nav-link>span {
+                width: auto;
+                font-size: 20px;
+            }
+
+            .business-type,
+            .quick-actions {
+                display: none;
+            }
+
+            .topbar {
+                height: 58px;
+                justify-content: space-between;
+                gap: 8px;
+                padding: 0 12px;
+            }
+
+            .mobile-menu {
+                display: block;
+                padding: 5px;
+                font-size: 18px;
+            }
+
+            .search-box {
+                width: auto;
+                flex: 1;
+            }
+
+            .search-box input {
+                min-width: 0;
+            }
+
+            .profile-button>span:nth-child(2),
+            .profile-button>span:nth-child(3) {
+                display: none;
+            }
+
+            .dashboard {
+                gap: 11px;
+                padding: 12px 10px 20px;
+            }
+
+            .welcome-banner {
+                min-height: 78px;
+                gap: 11px;
+                padding: 13px;
+            }
+
+            .welcome-icon {
+                width: 38px;
+                font-size: 28px;
+            }
+
+            .welcome-banner h1 {
+                font-size: 16px;
+            }
+
+            .welcome-banner p {
+                font-size: 11px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+                gap: 9px;
+            }
+
+            .summary-card {
+                min-height: 89px;
+            }
+
+            .panel {
+                padding: 12px;
+            }
+
+            .chart {
+                height: 170px;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <a class="brand" href="#" aria-label="Green Business Manager home">
+            <span class="brand-mark" aria-hidden="true">▥</span>
+            <span class="brand-copy">
+                <strong>Green Business Manager</strong>
+                <small>Plan · Track · Grow</small>
+            </span>
+        </a>
+
+        <nav class="main-nav" aria-label="Main navigation">
+            <a class="nav-link active" href="#"><span aria-hidden="true">⌂</span>Dashboard</a>
+            <a class="nav-link" href="#"><span aria-hidden="true">▣</span>Inventory</a>
+            <a class="nav-link" href="#"><span aria-hidden="true">🛒</span>Sales</a>
+            <a class="nav-link" href="#"><span aria-hidden="true">▤</span>Purchases</a>
+            <a class="nav-link" href="#"><span aria-hidden="true">▣</span>Expenses</a>
+            <a class="nav-link" href="#"><span aria-hidden="true">▥</span>Reports</a>
+            <a class="nav-link" href="#"><span aria-hidden="true">⚙</span>Settings</a>
+        </nav>
+
+        <section class="business-type">
+            <label for="business">Business Type</label>
+            <select id="business">
+                <option>Kiosk</option>
+                <option>Retail shop</option>
+                <option>hotel</option>
+                <option>Electronics</option>
+                <option>Pharmacy</option>
+                <option>Hardware</option>
+                <option>Berber Shop</option>
+                <option>Petroleum Filing Station</option>
+                <option>Salon</option>
+
+                <option>Other</option>
+            </select>
+        </section>
+
+        <section class="quick-actions">
+            <h2>Quick Actions</h2>
+            <button class="action-button add-product" type="button"><span aria-hidden="true">＋</span>Add
+                Product</button>
+            <button class="action-button record-sale" type="button"><span aria-hidden="true">🛒</span>Record
+                Sale</button>
+            <button class="action-button add-expense" type="button"><span aria-hidden="true">🧾</span>Add
+                Expense</button>
+            <button class="action-button record-purchase" type="button"><span aria-hidden="true">📥</span>Record
+                Purchase</button>
+            <button class="action-button view-reports" type="button"><span aria-hidden="true">📊</span>View
+                Reports</button>
+        </section>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <button class="mobile-menu" type="button" aria-label="Open navigation">☰</button>
+            <label class="search-box">
+                <span aria-hidden="true">⌕</span>
+                <input type="search" placeholder="Search products, transactions, or reports">
+            </label>
+            <button class="profile-button" type="button" aria-label="Account menu">
+                <span class="avatar" aria-hidden="true">♙</span>
+                <span>Account</span>
+                <span aria-hidden="true">⌄</span>
+            </button>
+        </header>
+
+        <div class="dashboard">
+            <section class="welcome-banner">
+                <span class="welcome-icon" aria-hidden="true">▥</span>
+                <div>
+                    <h1>Welcome to your dashboard!</h1>
+                    <p>Here's your business overview.</p>
+                </div>
+            </section>
+
+            <section class="summary-grid" aria-label="Business summary">
+                <article class="summary-card sales-card">
+                    <span class="summary-icon" aria-hidden="true">🛒</span>
+                    <div>
+                        <p>Total Sales</p>
+                        <strong>KSh 0.00</strong>
+                        <small>No sales recorded yet</small>
+                    </div>
+                </article>
+                <article class="summary-card expenses-card">
+                    <span class="summary-icon" aria-hidden="true">▣</span>
+                    <div>
+                        <p>Total Expenses</p>
+                        <strong>KSh 0.00</strong>
+                        <small>No expenses recorded yet</small>
+                    </div>
+                </article>
+                <article class="summary-card stock-card">
+                    <span class="summary-icon" aria-hidden="true">▤</span>
+                    <div>
+                        <p>Products in Stock</p>
+                        <strong>0</strong>
+                        <small>No products added yet</small>
+                    </div>
+                </article>
+            </section>
+
+            <section class="panel sales-overview">
+                <div class="panel-heading">
+                    <h2><span aria-hidden="true">▥</span> Sales Overview</h2>
+                    <select aria-label="Sales chart time period">
+                        <option>Last 7 days</option>
+                        <option>This month</option>
+                    </select>
+                </div>
+                <div class="chart" role="img" aria-label="No sales data recorded yet">
+                    <p class="chart-empty">Your sales chart will appear here when you record sales.</p>
+                </div>
+            </section>
+
+            <section class="panel inventory-panel">
+                <div class="panel-heading">
+                    <h2><span aria-hidden="true">▤</span> Inventory Status</h2>
+                    <a href="#">View All <span aria-hidden="true">→</span></a>
+                </div>
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Current Stock</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="4" class="empty-inventory">No products yet. Add a product to get started.
+                                    <span>Starting price: KSh 0.00</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+<script>
+/* GREEN BUSINESS MANAGER — local, single-user app */
+(() => {
+  "use strict";
+
+  const $ = (s, root = document) => root.querySelector(s);
+  const $$ = (s, root = document) => [...root.querySelectorAll(s)];
+  const money = n => "KSh " + Number(n || 0).toLocaleString("en-KE", {
+    minimumFractionDigits: 2, maximumFractionDigits: 2
+  });
+  const num = v => Math.max(0, Number(v) || 0);
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  const today = () => {
+    const d = new Date();
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d.toISOString().slice(0, 10);
+  };
+  const monthKey = d => String(d || "").slice(0, 7);
+  const todayFor = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+  const escapeHTML = v => String(v ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  }[c]));
+
+  const STORE = "greenBusinessManager.v1";
+  const blankBusiness = (name = "My Business", type = "Kiosk") => ({
+    id: uid(), name, type, products: [], transactions: [], createdAt: new Date().toISOString()
+  });
+  let state = loadState();
+  let page = "Dashboard";
+  let searchTerm = "";
+  let chartPeriod = "This month";
+  const dashboardTemplate = $(".dashboard").innerHTML;
+
+  function loadState() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORE));
+      if (saved && Array.isArray(saved.businesses) && saved.businesses.length) {
+        saved.activeId ||= saved.businesses[0].id;
+        saved.businesses.forEach(b => {
+          b.products ||= [];
+          b.transactions ||= [];
+        });
+        return saved;
+      }
+    } catch (e) {}
+    const b = blankBusiness("My Kiosk", "Kiosk");
+    return { businesses: [b], activeId: b.id };
+  }
+  function save() {
+    try {
+      localStorage.setItem(STORE, JSON.stringify(state));
+    } catch (e) {
+      console.error("Local save failed:", e);
+      notify("Changes are in this session but could not be saved. Download a backup.");
+    }
+    render();
+  }
+  const business = () => state.businesses.find(b => b.id === state.activeId) || state.businesses[0];
+  const transactions = () => business().transactions;
+  const products = () => business().products;
+  const product = id => products().find(p => p.id === id);
+  const tx = (type, data) => ({ id: uid(), type, date: today(), createdAt: new Date().toISOString(), ...data });
+
+  function injectStyles() {
+    const style = document.createElement("style");
+    style.textContent = `
+      .gbm-modal-backdrop{position:fixed;inset:0;z-index:9999;background:#020b1acc;
+        display:grid;place-items:center;padding:16px;overflow:auto}
+      .gbm-modal{width:min(680px,100%);max-height:92vh;overflow:auto;background:#0b2042;
+        border:1px solid #35547d;border-radius:14px;padding:20px;color:#e7efff;
+        box-shadow:0 20px 70px #0008}
+      .gbm-modal h2{margin:0 0 16px;font-size:19px}
+      .gbm-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+      .gbm-field{display:grid;gap:6px;font-size:12px;color:#bfd0e8}
+      .gbm-field.full{grid-column:1/-1}
+      .gbm-field input,.gbm-field select,.gbm-field textarea{width:100%;min-width:0;
+        padding:10px;border:1px solid #35547d;border-radius:8px;background:#10294d;color:#fff}
+      .gbm-actions{display:flex;flex-wrap:wrap;gap:9px;justify-content:flex-end;margin-top:18px}
+      .gbm-btn{border:1px solid #42628d;border-radius:8px;padding:10px 13px;background:#19375f;
+        color:#fff;cursor:pointer;font:inherit;font-size:12px;font-weight:700}
+      .gbm-btn.primary{background:#0879f9;border-color:#0879f9}
+      .gbm-btn.danger{background:#8b2e45;border-color:#a8425a}
+      .gbm-btn:hover{filter:brightness(1.12)}
+      .gbm-toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
+      .gbm-toolbar input,.gbm-toolbar select{padding:9px;border:1px solid #29466f;border-radius:8px;
+        background:#10294d;color:#e7efff}
+      .gbm-table{width:100%;border-collapse:collapse}
+      .gbm-table th,.gbm-table td{padding:10px;border-top:1px solid #29466f;text-align:left;font-size:12px}
+      .gbm-table th{color:#aebfda}
+      .gbm-table td{white-space:normal}
+      .gbm-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:14px}
+      .gbm-stat{padding:14px;background:#102c50;border:1px solid #29466f;border-radius:10px}
+      .gbm-stat small{display:block;color:#b5c6df;margin-bottom:7px}
+      .gbm-stat strong{font-size:18px}
+      .gbm-note{color:#b5c6df;font-size:12px;line-height:1.5}
+      .gbm-empty{padding:22px;text-align:center;color:#b5c6df}
+      .gbm-pill{display:inline-block;border-radius:20px;padding:4px 8px;background:#173d62;font-size:10px}
+      .gbm-alert{color:#ffc66f}
+      .gbm-positive{color:#43ddb0}
+      .gbm-negative{color:#ff9aaa}
+      .gbm-row-actions{display:flex;gap:6px;flex-wrap:wrap}
+      .gbm-chart-bars{height:180px;display:flex;align-items:end;gap:8px;padding:12px 4px 0;
+        border-bottom:1px solid #42628d}
+      .gbm-bar-wrap{flex:1;min-width:0;text-align:center;font-size:10px;color:#b5c6df}
+      .gbm-bar{min-height:2px;background:linear-gradient(#20c9a2,#0879f9);border-radius:5px 5px 0 0}
+      .gbm-bar-label{margin-top:6px;overflow:hidden}
+      .gbm-nav-active{outline:1px solid #6aa8ff}
+      @media(max-width:650px){.gbm-form{grid-template-columns:1fr}.gbm-field.full{grid-column:auto}
+        .gbm-stat-grid{grid-template-columns:1fr}.gbm-modal{padding:15px}}
+    `;
+    document.head.appendChild(style);
+  }
+
+  function openModal(title, fields, onSubmit, submitText = "Save") {
+    const old = $(".gbm-modal-backdrop");
+    if (old) old.remove();
+    const backdrop = document.createElement("div");
+    backdrop.className = "gbm-modal-backdrop";
+    backdrop.innerHTML = `<section class="gbm-modal" role="dialog" aria-modal="true">
+      <h2>${escapeHTML(title)}</h2>
+      <form class="gbm-form">${fields.map(f => fieldHTML(f)).join("")}
+        <div class="gbm-field full"><div class="gbm-actions">
+          <button type="button" class="gbm-btn" data-close>Cancel</button>
+          <button class="gbm-btn primary" type="submit">${escapeHTML(submitText)}</button>
+        </div></div>
+      </form></section>`;
+    document.body.appendChild(backdrop);
+    const form = $("form", backdrop);
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+      if (onSubmit(data) !== false) backdrop.remove();
+    });
+    $("[data-close]", backdrop).onclick = () => backdrop.remove();
+    backdrop.addEventListener("click", e => { if (e.target === backdrop) backdrop.remove(); });
+    const first = $("input,select,textarea", form);
+    if (first) first.focus();
+  }
+
+  function fieldHTML(f) {
+    const required = f.required === false ? "" : "required";
+    const value = f.value == null ? "" : String(f.value);
+    let control = "";
+    if (f.options) {
+      control = `<select name="${escapeHTML(f.name)}" ${required}>
+        ${f.options.map(o => {
+          const val = typeof o === "string" ? o : o.value;
+          const label = typeof o === "string" ? o : o.label;
+          return `<option value="${escapeHTML(val)}" ${value === val ? "selected" : ""}>${escapeHTML(label)}</option>`;
+        }).join("")}</select>`;
+    } else if (f.type === "textarea") {
+      control = `<textarea name="${escapeHTML(f.name)}" rows="3" ${required}>${escapeHTML(value)}</textarea>`;
+    } else {
+      control = `<input name="${escapeHTML(f.name)}" type="${escapeHTML(f.type || "text")}"
+        value="${escapeHTML(value)}" ${f.min != null ? `min="${f.min}"` : ""}
+        ${f.step ? `step="${f.step}"` : ""} ${f.placeholder ? `placeholder="${escapeHTML(f.placeholder)}"` : ""}
+        ${required}>`;
+    }
+    return `<label class="gbm-field ${f.full ? "full" : ""}">${escapeHTML(f.label)}${control}</label>`;
+  }
+
+  function notify(message) {
+    let note = $("#gbm-toast");
+    if (!note) {
+      note = document.createElement("div");
+      note.id = "gbm-toast";
+      note.style.cssText = "position:fixed;right:18px;bottom:18px;z-index:10000;background:#123a60;color:white;padding:12px 16px;border:1px solid #4c78a7;border-radius:9px;max-width:90vw;font-size:13px;box-shadow:0 8px 28px #0006";
+      document.body.appendChild(note);
+    }
+    note.textContent = message;
+    note.hidden = false;
+    clearTimeout(note._timer);
+    note._timer = setTimeout(() => note.hidden = true, 3200);
+  }
+
+  function addBusiness() {
+    openModal("Register a business", [
+      {label:"Business name",name:"name",placeholder:"e.g. Green Star Kiosk"},
+      {label:"Business type",name:"type",options:["Kiosk","Bookshop","Wholesale shop","Retail shop","Hotel","Pharmacy","Electronics","Hardware","Barber Shop","Petrol Station","Salon","Agribusiness","Custom business"]},
+      {label:"Custom type (optional)",name:"customType",required:false,placeholder:"Use if type is Custom business"}
+    ], d => {
+      const name = d.name.trim();
+      if (!name) { notify("Enter a business name."); return false; }
+      const type = d.type === "Custom business" ? (d.customType.trim() || "Custom business") : d.type;
+      const b = blankBusiness(name, type);
+      state.businesses.push(b);
+      state.activeId = b.id;
+      page = "Dashboard";
+      save();
+      notify("Business registered.");
+    });
+  }
+
+  function editBusiness() {
+    const b = business();
+    openModal("Business settings", [
+      {label:"Business name",name:"name",value:b.name},
+      {label:"Business type",name:"type",value:b.type}
+    ], d => {
+      b.name = d.name.trim() || b.name;
+      b.type = d.type.trim() || b.type;
+      save();
+      notify("Business details updated.");
+    });
+  }
+
+  function addProduct(existing = null) {
+    const p = existing || {};
+    openModal(existing ? "Edit product" : "Add product", [
+      {label:"Product name",name:"name",value:p.name},
+      {label:"Buying price (KES)",name:"buy",type:"number",min:0,step:"0.01",value:p.buy ?? 0},
+      {label:"Selling price (KES)",name:"sell",type:"number",min:0,step:"0.01",value:p.sell ?? 0},
+      {label:"Opening stock quantity",name:"stock",type:"number",min:0,step:"0.001",value:p.stock ?? 0},
+      {label:"Supplier",name:"supplier",value:p.supplier,required:false},
+      {label:"Expiry date (optional)",name:"expiry",type:"date",value:p.expiry,required:false},
+      {label:"Low-stock alert level",name:"low",type:"number",min:0,step:"0.001",value:p.low ?? 5},
+      {label:"Unit (e.g. pieces, litres, packets)",name:"unit",value:p.unit || "pieces"}
+    ], d => {
+      if (!d.name.trim()) { notify("Enter the product name."); return false; }
+      const item = {
+        id: p.id || uid(), name:d.name.trim(), buy:num(d.buy), sell:num(d.sell),
+        stock:num(d.stock), supplier:d.supplier.trim(), expiry:d.expiry,
+        low:num(d.low), unit:d.unit.trim() || "units"
+      };
+      if (p.id) Object.assign(p, item);
+      else products().push(item);
+      save();
+      notify(p.id ? "Product updated." : "Product added.");
+    });
+  }
+
+  function recordPurchase() {
+    if (!products().length) { notify("Add a product before recording a purchase."); return; }
+    openModal("Record purchase", [
+      {label:"Product",name:"productId",options:products().map(p => ({value:p.id,label:`${p.name} (stock: ${p.stock})`}))},
+      {label:"Quantity purchased",name:"qty",type:"number",min:0.001,step:"0.001"},
+      {label:"Buying price per unit (KES)",name:"price",type:"number",min:0,step:"0.01",value:products()[0]?.buy ?? 0},
+      {label:"Supplier (optional)",name:"supplier",required:false},
+      {label:"Date",name:"date",type:"date",value:today()},
+      {label:"Notes (optional)",name:"note",required:false,full:true}
+    ], d => {
+      const p = product(d.productId), qty = num(d.qty), price = num(d.price);
+      if (!p || qty <= 0) { notify("Choose a product and enter a quantity above zero."); return false; }
+      p.stock += qty;
+      p.buy = price;
+      if (d.supplier.trim()) p.supplier = d.supplier.trim();
+      transactions().push(tx("purchase", {productId:p.id, productName:p.name, qty, price,
+        total:qty*price, supplier:d.supplier || p.supplier, date:d.date || today(), note:d.note}));
+      save();
+      notify("Purchase saved and stock increased.");
+    });
+  }
+
+  function recordSale() {
+    if (!products().some(p => p.stock > 0)) { notify("Add a product with stock before recording a sale."); return; }
+    openModal("Record sale", [
+      {label:"Product",name:"productId",options:products().filter(p=>p.stock>0).map(p => ({value:p.id,label:`${p.name} — ${p.stock} ${p.unit} available`}))},
+      {label:"Quantity sold",name:"qty",type:"number",min:0.001,step:"0.001"},
+      {label:"Selling price per unit (KES)",name:"price",type:"number",min:0,step:"0.01",value:products().find(p=>p.stock>0)?.sell ?? 0},
+      {label:"Date",name:"date",type:"date",value:today()},
+      {label:"Notes (optional)",name:"note",required:false,full:true}
+    ], d => {
+      const p = product(d.productId), qty = num(d.qty), price = num(d.price);
+      if (!p || qty <= 0) { notify("Choose a product and enter a quantity above zero."); return false; }
+      if (qty > p.stock) { notify(`Only ${p.stock} ${p.unit} available.`); return false; }
+      p.stock = Math.max(0, p.stock - qty);
+      transactions().push(tx("sale", {productId:p.id, productName:p.name, qty, price,
+        cost:p.buy, total:qty*price, profit:qty*(price-p.buy), date:d.date || today(), note:d.note}));
+      save();
+      notify("Sale saved and stock reduced.");
+    });
+  }
+
+  function addExpense() {
+    openModal("Record business expense", [
+      {label:"Expense category",name:"category",options:["Rent","Transport","Salaries","Electricity","Water","Internet","Repairs","Damaged goods","Packaging","Other"]},
+      {label:"Amount (KES)",name:"amount",type:"number",min:0.01,step:"0.01"},
+      {label:"Date",name:"date",type:"date",value:today()},
+      {label:"Description / notes",name:"note",required:false,full:true}
+    ], d => {
+      const amount = num(d.amount);
+      if (!amount) { notify("Enter an expense amount above zero."); return false; }
+      transactions().push(tx("expense", {category:d.category, amount, total:amount, date:d.date || today(), note:d.note}));
+      save();
+      notify("Expense recorded.");
+    });
+  }
+
+  function totals() {
+    const t = transactions();
+    const sales = t.filter(x=>x.type==="sale");
+    const purchases = t.filter(x=>x.type==="purchase");
+    const expenses = t.filter(x=>x.type==="expense");
+    const revenue = sales.reduce((s,x)=>s+num(x.total),0);
+    const gross = sales.reduce((s,x)=>s+num(x.profit),0);
+    const expenseTotal = expenses.reduce((s,x)=>s+num(x.amount),0);
+    const stockValue = products().reduce((s,p)=>s+num(p.stock)*num(p.buy),0);
+    return {sales,revenue,gross,expenses,expenseTotal,stockValue,purchases,
+      net:gross-expenseTotal, units:products().reduce((s,p)=>s+num(p.stock),0)};
+  }
+
+  function render() {
+    const b = business();
+    $("#business").innerHTML = state.businesses.map(x =>
+      `<option value="${x.id}" ${x.id===state.activeId?"selected":""}>${escapeHTML(x.name)} (${escapeHTML(x.type)})</option>`
+    ).join("");
+    const banner = $(".welcome-banner");
+    if (banner) {
+      $("h1", banner).textContent = `Welcome to ${b.name}!`;
+      $("p", banner).textContent = `${b.type} · Here's your business overview.`;
+    }
+    $$(".nav-link").forEach(a => {
+      const label = a.textContent.replace(/^[^\p{L}\p{N}]+/u,"").trim();
+      a.classList.toggle("active", label.toLowerCase() === page.toLowerCase());
+    });
+    if (page === "Dashboard") renderDashboard();
+    else renderPage();
+  }
+
+  function renderDashboard() {
+    if (!( $(".welcome-banner") )) $(".dashboard").innerHTML = dashboardTemplate;
+    const d = totals();
+    const cards = $$(".summary-card");
+    if (cards[0]) {
+      $("strong",cards[0]).textContent = money(d.revenue);
+      $("small",cards[0]).textContent = `${d.sales.length} sale transaction(s)`;
+    }
+    if (cards[1]) {
+      $("strong",cards[1]).textContent = money(d.expenseTotal);
+      $("small",cards[1]).textContent = `Net profit/loss: ${money(d.net)}`;
+    }
+    if (cards[2]) {
+      $("strong",cards[2]).textContent = d.units.toLocaleString("en-KE");
+      $("small",cards[2]).textContent = `${products().length} product(s) registered`;
+    }
+    const body = $(".inventory-panel tbody");
+    const list = products().slice(0,8);
+    body.innerHTML = list.length ? list.map(p => `<tr>
+      <td>${escapeHTML(p.name)}</td><td>${money(p.sell)}</td><td>${p.stock} ${escapeHTML(p.unit)}</td>
+      <td><span class="${p.stock<=p.low?"status-low":"status-in-stock"}">${p.stock<=p.low?"Low stock":"In stock"}</span></td>
+    </tr>`).join("") : `<tr><td colspan="4" class="empty-inventory">No products yet. Add a product to get started.
+      <span>Starting price: KSh 0.00</span></td></tr>`;
+    const chart = $(".chart");
+    const selector = $(".sales-overview select");
+    if (selector) selector.value = chartPeriod;
+    const now = new Date();
+    const buckets = [];
+    if (chartPeriod === "Last 7 days") {
+      for (let i = 6; i >= 0; i--) {
+        const day = new Date(now);
+        day.setDate(now.getDate() - i);
+        const key = todayFor(day);
+        buckets.push({key, label: day.toLocaleDateString("en-KE", {weekday:"short"}), value:0});
+      }
+    } else {
+      const year = now.getFullYear(), month = now.getMonth();
+      for (let i = 1; i <= new Date(year, month + 1, 0).getDate(); i++) {
+        const day = new Date(year, month, i);
+        buckets.push({key:todayFor(day), label:String(i), value:0});
+      }
+    }
+    d.sales.forEach(s => {
+      const bucket = buckets.find(x => x.key === s.date);
+      if (bucket) bucket.value += num(s.total);
+    });
+    const visible = buckets.filter((x,i) => chartPeriod === "Last 7 days" || i % 3 === 0 || i === buckets.length - 1);
+    const maxSale = Math.max(1, ...buckets.map(x => x.value));
+    chart.innerHTML = buckets.some(x => x.value) ?
+      `<div class="gbm-chart-bars">${visible.map(x => `<div class="gbm-bar-wrap" title="${escapeHTML(x.key)}: ${money(x.value)}"><div class="gbm-bar" style="height:${Math.max(3,x.value/maxSale*125)}px"></div><div class="gbm-bar-label">${escapeHTML(x.label)}</div></div>`).join("")}</div><p class="gbm-note">${chartPeriod} · ${money(buckets.reduce((sum,x)=>sum+x.value,0))} sales revenue</p>` :
+      `<p class="chart-empty">No sales in ${chartPeriod.toLowerCase()} yet. Record a sale to build your chart.</p>`;
+    const alert = products().filter(p=>p.stock<=p.low);
+    let alertBox = $("#gbm-low-alerts");
+    if (!alertBox) {
+      alertBox = document.createElement("section");
+      alertBox.id = "gbm-low-alerts";
+      alertBox.className = "panel";
+      $(".dashboard").insertBefore(alertBox, $(".inventory-panel"));
+    }
+    alertBox.innerHTML = `<div class="panel-heading"><h2>⚠ Low-stock alerts</h2></div>
+      ${alert.length ? alert.map(p=>`<p class="gbm-note gbm-alert">${escapeHTML(p.name)}: ${p.stock} ${escapeHTML(p.unit)} remaining (alert at ${p.low})</p>`).join("") : '<p class="gbm-note">No low-stock alerts.</p>'}`;
+  }
+
+  function pagePanel(title, subtitle, body) {
+    $(".dashboard").innerHTML = `<section class="panel">
+      <div class="panel-heading"><h2>${escapeHTML(title)}</h2><span class="gbm-note">${escapeHTML(business().name)}</span></div>
+      <p class="gbm-note">${escapeHTML(subtitle)}</p>${body}</section>`;
+  }
+
+  function renderPage() {
+    if (page === "Inventory") return renderInventory();
+    if (page === "Sales") return renderTransactions("sale");
+    if (page === "Purchases") return renderTransactions("purchase");
+    if (page === "Expenses") return renderTransactions("expense");
+    if (page === "Reports") return renderReports();
+    if (page === "Settings") return renderSettings();
+    page = "Dashboard"; renderDashboard();
+  }
+
+  function renderInventory() {
+    const rows = products().filter(p => !searchTerm || `${p.name} ${p.supplier}`.toLowerCase().includes(searchTerm.toLowerCase()));
+    const body = rows.map(p => `<tr><td>${escapeHTML(p.name)}</td><td>${money(p.buy)}</td><td>${money(p.sell)}</td>
+      <td>${p.stock} ${escapeHTML(p.unit)}</td><td>${escapeHTML(p.supplier || "—")}</td><td>${escapeHTML(p.expiry || "—")}</td>
+      <td>${p.stock<=p.low?'<span class="status-low">Low stock</span>':'<span class="status-in-stock">In stock</span>'}</td>
+      <td><div class="gbm-row-actions"><button class="gbm-btn" data-edit="${p.id}">Edit</button><button class="gbm-btn danger" data-delete="${p.id}">Delete</button></div></td></tr>`).join("");
+    pagePanel("Inventory", "Manage products, prices, stock, suppliers, expiry dates and low-stock levels.",
+      `<div class="gbm-toolbar"><button class="gbm-btn primary" data-action="add-product">＋ Add product</button>
+      <button class="gbm-btn" data-action="purchase">Record purchase</button><input id="gbm-search" placeholder="Search products..." value="${escapeHTML(searchTerm)}"></div>
+      <div class="table-scroll"><table class="gbm-table"><thead><tr><th>Product</th><th>Buying</th><th>Selling</th><th>Stock</th><th>Supplier</th><th>Expiry</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>${body || '<tr><td colspan="8" class="gbm-empty">No products found. Add your first product.</td></tr>'}</tbody></table></div>`);
+  }
+
+  function renderTransactions(type) {
+    const names = {sale:"Sales",purchase:"Purchases",expense:"Expenses"};
+    const all = transactions().filter(t=>t.type===type).filter(t =>
+      !searchTerm || `${t.productName||""} ${t.category||""} ${t.note||""}`.toLowerCase().includes(searchTerm.toLowerCase()));
+    const rows = all.slice().reverse().map(t => `<tr>
+      <td>${escapeHTML(t.date)}</td><td>${escapeHTML(t.productName || t.category || "")}</td>
+      <td>${t.qty != null ? t.qty : "—"}</td><td>${money(t.price ?? t.amount)}</td>
+      <td>${money(t.total ?? t.amount)}</td><td>${type==="sale"?money(t.profit):escapeHTML(t.supplier || t.note || "—")}</td>
+    </tr>`).join("");
+    const action = type==="sale" ? "sale" : type==="purchase" ? "purchase" : "expense";
+    pagePanel(names[type], `Review and record ${names[type].toLowerCase()} for this business.`,
+      `<div class="gbm-toolbar"><button class="gbm-btn primary" data-action="${action}">＋ Record ${type}</button>
+      <input id="gbm-search" placeholder="Search records..." value="${escapeHTML(searchTerm)}"></div>
+      <div class="table-scroll"><table class="gbm-table"><thead><tr><th>Date</th><th>Item / Category</th><th>Qty</th><th>Unit / Amount</th><th>Total</th><th>${type==="sale"?"Gross profit":"Details"}</th></tr></thead>
+      <tbody>${rows || `<tr><td colspan="6" class="gbm-empty">No ${names[type].toLowerCase()} recorded yet.</td></tr>`}</tbody></table></div>`);
+  }
+
+  function renderReports() {
+    const d = totals();
+    const months = {};
+    d.sales.forEach(s => { const m=monthKey(s.date); months[m]=(months[m]||0)+num(s.total); });
+    const keys = Object.keys(months).sort().slice(-6);
+    const max = Math.max(1,...keys.map(k=>months[k]));
+    const bars = keys.map(k=>`<div class="gbm-bar-wrap"><div class="gbm-bar" style="height:${Math.max(3,months[k]/max*130)}px"></div>
+      <div class="gbm-bar-label">${escapeHTML(k)}</div><div>${money(months[k])}</div></div>`).join("");
+    const recent = transactions().slice().sort((a,b)=>(b.createdAt||"").localeCompare(a.createdAt||"")).slice(0,12);
+    pagePanel("Reports", "Sales, stock value, gross profit, net profit/loss and recent activity.",
+      `<div class="gbm-stat-grid">
+        <div class="gbm-stat"><small>Sales revenue</small><strong>${money(d.revenue)}</strong></div>
+        <div class="gbm-stat"><small>Stock value at buying cost</small><strong>${money(d.stockValue)}</strong></div>
+        <div class="gbm-stat"><small>Gross profit</small><strong>${money(d.gross)}</strong></div>
+        <div class="gbm-stat"><small>Expenses</small><strong>${money(d.expenseTotal)}</strong></div>
+        <div class="gbm-stat"><small>Net profit / loss</small><strong class="${d.net>=0?"gbm-positive":"gbm-negative"}">${money(d.net)}</strong></div>
+        <div class="gbm-stat"><small>Products / units in stock</small><strong>${products().length} / ${d.units}</strong></div>
+      </div><h3>Monthly sales</h3>
+      <div class="gbm-chart-bars">${bars || '<p class="gbm-empty">No sales data to chart yet.</p>'}</div>
+      <h3>Recent business activity</h3><div class="table-scroll"><table class="gbm-table"><thead><tr><th>Date</th><th>Activity</th><th>Details</th><th>Value</th></tr></thead><tbody>
+      ${recent.map(t=>`<tr><td>${escapeHTML(t.date)}</td><td>${escapeHTML(t.type)}</td><td>${escapeHTML(t.productName||t.category||t.note||"")}</td><td>${money(t.total??t.amount)}</td></tr>`).join("") || '<tr><td colspan="4" class="gbm-empty">No activity recorded.</td></tr>'}
+      </tbody></table></div><p class="gbm-note">Gross profit is calculated from recorded sales using each product's buying price at the time of sale. Net profit/loss = gross profit − recorded expenses. This is a simple management estimate, not a tax statement.</p>`);
+  }
+
+  function renderSettings() {
+    pagePanel("Settings & backups", "Manage businesses and keep a copy of your local records.",
+      `<div class="gbm-toolbar"><button class="gbm-btn primary" data-action="add-business">＋ Register business</button>
+      <button class="gbm-btn" data-action="edit-business">Edit current business</button>
+      <button class="gbm-btn" data-action="backup">Download backup</button>
+      <button class="gbm-btn" data-action="restore">Restore backup</button></div>
+      <h3>Registered businesses</h3><div class="table-scroll"><table class="gbm-table"><thead><tr><th>Name</th><th>Type</th><th>Products</th><th>Transactions</th><th>Actions</th></tr></thead><tbody>
+      ${state.businesses.map(b=>`<tr><td>${escapeHTML(b.name)} ${b.id===state.activeId?'<span class="gbm-pill">Current</span>':''}</td>
+      <td>${escapeHTML(b.type)}</td><td>${b.products.length}</td><td>${b.transactions.length}</td><td><div class="gbm-row-actions">
+      <button class="gbm-btn" data-switch="${b.id}">Open</button>${state.businesses.length>1?`<button class="gbm-btn danger" data-remove-business="${b.id}">Delete</button>`:""}</div></td></tr>`).join("")}
+      </tbody></table></div><p class="gbm-note">Data is saved in this browser on this device. Clearing browser site data can erase it, so download backups regularly. This app has no password and is intended for one user.</p>`);
+  }
+
+  function backup() {
+    const blob = new Blob([JSON.stringify({...state, backupVersion:1, exportedAt:new Date().toISOString()}, null, 2)], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = `green-business-backup-${today()}.json`; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    notify("Backup download started.");
+  }
+
+  function restore() {
+    const input = document.createElement("input");
+    input.type = "file"; input.accept = ".json,application/json";
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (!file) return;
+      try {
+        const data = JSON.parse(await file.text());
+        if (!Array.isArray(data.businesses) || !data.businesses.length ||
+            !data.businesses.every(b => b && typeof b.name === "string" && Array.isArray(b.products) && Array.isArray(b.transactions)))
+          throw new Error("Invalid backup");
+        if (!confirm("Restore this backup? Current local data will be replaced.")) return;
+        state = data;
+        state.businesses.forEach(b=>{
+          b.products ||= []; b.transactions ||= [];
+          b.products.forEach(p => { p.stock=num(p.stock); p.buy=num(p.buy); p.sell=num(p.sell); });
+        });
+        state.activeId = state.businesses.some(b=>b.id===state.activeId) ? state.activeId : state.businesses[0].id;
+        page = "Dashboard"; searchTerm = "";
+        save(); notify("Backup restored successfully.");
+      } catch (e) { notify("Could not restore this file. Choose a valid Green Business Manager JSON backup."); }
+    };
+    input.click();
+  }
+
+  function deleteProduct(id) {
+    const p = product(id);
+    if (!p || !confirm(`Delete ${p.name}? Existing transaction history will remain.`)) return;
+    business().products = products().filter(x=>x.id!==id);
+    save(); notify("Product deleted.");
+  }
+
+  function deleteBusiness(id) {
+    const b = state.businesses.find(x=>x.id===id);
+    if (!b || state.businesses.length<2) return;
+    if (!confirm(`Delete "${b.name}" and all its products and transaction history? Download a backup first if needed.`)) return;
+    state.businesses = state.businesses.filter(x=>x.id!==id);
+    if (state.activeId===id) state.activeId=state.businesses[0].id;
+    save(); notify("Business deleted.");
+  }
+
+  function navigate(label) {
+    const clean = label.trim();
+    page = ["Dashboard","Inventory","Sales","Purchases","Expenses","Reports","Settings"].find(x=>x.toLowerCase()===clean.toLowerCase()) || "Dashboard";
+    searchTerm = "";
+    render();
+  }
+
+  document.addEventListener("click", e => {
+    const nav = e.target.closest(".nav-link");
+    if (nav) { e.preventDefault(); navigate(nav.textContent.replace(/^[^\p{L}\p{N}]+/u,"").trim()); return; }
+    if (e.target.closest(".brand")) { e.preventDefault(); navigate("Dashboard"); return; }
+    const quick = e.target.closest(".action-button");
+    if (quick) {
+      if (quick.classList.contains("add-product")) addProduct();
+      else if (quick.classList.contains("record-sale")) recordSale();
+      else if (quick.classList.contains("add-expense")) addExpense();
+      else if (quick.classList.contains("record-purchase")) recordPurchase();
+      else navigate("Reports");
+      return;
+    }
+    const action = e.target.closest("[data-action]")?.dataset.action;
+    if (action) {
+      ({ "add-product":addProduct, sale:recordSale, purchase:recordPurchase,
+        expense:addExpense, "add-business":addBusiness, "edit-business":editBusiness,
+        backup, restore })[action]?.();
+      return;
+    }
+    const edit = e.target.closest("[data-edit]")?.dataset.edit;
+    if (edit) { addProduct(product(edit)); return; }
+    const del = e.target.closest("[data-delete]")?.dataset.delete;
+    if (del) { deleteProduct(del); return; }
+    const sw = e.target.closest("[data-switch]")?.dataset.switch;
+    if (sw) { state.activeId=sw; page="Dashboard"; searchTerm=""; save(); notify("Business opened."); return; }
+    const remove = e.target.closest("[data-remove-business]")?.dataset.removeBusiness;
+    if (remove) { deleteBusiness(remove); return; }
+  });
+
+  document.addEventListener("input", e => {
+    if (e.target.id === "gbm-search") {
+      const pos = e.target.selectionStart;
+      searchTerm = e.target.value;
+      const y = window.scrollY;
+      render();
+      const input = $("#gbm-search");
+      if (input) { input.focus(); input.setSelectionRange(pos,pos); }
+      window.scrollTo(0,y);
+    }
+  });
+
+  $("#business").addEventListener("change", e => {
+    state.activeId = e.target.value;
+    page = "Dashboard"; searchTerm = "";
+    save();
+  });
+
+  $(".profile-button").addEventListener("click", () => {
+    openModal("Account & data", [
+      {label:"Current business",name:"name",value:business().name},
+      {label:"Information",name:"info",type:"textarea",value:"Single-user app. No password is set. Data is stored locally in this browser.",required:false,full:true}
+    ], () => { renderSettings(); page="Settings"; render(); });
+  });
+
+  const mobile = $(".mobile-menu");
+  mobile.addEventListener("click", () => {
+    const sidebar = $(".sidebar");
+    sidebar.style.position = sidebar.style.position ? "" : "fixed";
+    sidebar.style.zIndex = sidebar.style.zIndex ? "" : "500";
+    sidebar.style.left = sidebar.style.left ? "" : "0";
+    sidebar.style.top = sidebar.style.top ? "" : "0";
+    sidebar.style.bottom = sidebar.style.bottom ? "" : "0";
+    sidebar.style.overflowY = sidebar.style.overflowY ? "" : "auto";
+    sidebar.style.boxShadow = sidebar.style.boxShadow ? "" : "10px 0 30px #0008";
+  });
+
+  const chartSelect = $(".sales-overview select");
+  chartSelect.addEventListener("change", e => {
+    chartPeriod = e.target.value;
+    renderDashboard();
+  });
+
+  const search = $('.search-box input');
+  search.addEventListener("input", e => {
+    searchTerm = e.target.value;
+    if (page !== "Dashboard") render();
+  });
+
+  // Keep original layout and style; add working business controls to the existing design.
+  injectStyles();
+  const topbar = $(".topbar");
+  const register = document.createElement("button");
+  register.className = "gbm-btn primary";
+  register.type = "button";
+  register.textContent = "+ Business";
+  register.style.whiteSpace = "nowrap";
+  register.onclick = addBusiness;
+  topbar.insertBefore(register, $(".profile-button"));
+  const settingsLink = $$(".nav-link").find(a=>a.textContent.includes("Settings"));
+  if (settingsLink) settingsLink.title = "Business settings and backups";
+  render();
+})();
+</script>
+
+</body>
+
+</html>
